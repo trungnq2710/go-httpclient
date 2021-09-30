@@ -47,3 +47,8 @@ func (c *Client) UseTrace() *Client {
 	c.method = MethodTrace
 	return c
 }
+
+func (c *Client) SetMethod(m string) *Client {
+	c.method = m
+	return c
+}
