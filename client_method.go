@@ -3,6 +3,8 @@
 
 package go_http_client
 
+import "strings"
+
 func (c *Client) UseGet() *Client {
 	c.method = MethodGet
 	return c
@@ -49,6 +51,27 @@ func (c *Client) UseTrace() *Client {
 }
 
 func (c *Client) SetMethod(m string) *Client {
-	c.method = m
-	return c
+	switch strings.ToUpper(m) {
+	case MethodGet:
+		return c.UseGet()
+	case MethodHead:
+		return c.UseHead()
+	case MethodPost:
+		return c.UsePost()
+	case MethodPut:
+		return c.UsePut()
+	case MethodPatch:
+		return c.UsePatch()
+	case MethodDelete:
+		return c.UseDelete()
+	case MethodConnect:
+		return c.UseConnect()
+	case MethodOptions:
+		return c.UseOptions()
+	case MethodTrace:
+		return c.UseTrace()
+	default:
+		// @todo @trungnq set err
+	}
+	return c.UseGet()
 }
