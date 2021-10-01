@@ -1,4 +1,4 @@
-module github.com/trungnq2710/go-http-client
+module github.com/trungnq2710/go-httpclient
 
 go 1.16
 
