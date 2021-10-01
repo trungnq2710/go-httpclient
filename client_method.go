@@ -71,7 +71,7 @@ func (c *Client) SetMethod(m string) *Client {
 	case MethodTrace:
 		return c.UseTrace()
 	default:
-		// @todo @trungnq set err
+		// TODO trungnq set err
 	}
 	return c.UseGet()
 }
