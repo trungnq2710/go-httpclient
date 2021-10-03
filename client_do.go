@@ -44,6 +44,10 @@ func (c *Client) buildRequest() (err error) {
 		c.req.URL.RawQuery = q.Encode()
 	}
 
+	for _, cookie := range c.cookies {
+		c.req.AddCookie(cookie)
+	}
+
 	return err
 }
 

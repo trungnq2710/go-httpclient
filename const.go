@@ -3,9 +3,14 @@
 
 package go_httpclient
 
+import "time"
+
 const (
-	defaultMaxIdleConnPerHost = 50
-	defaultMaxIdleConn        = 50
+	defaultMaxIdleConnPerHost               = 50
+	defaultMaxIdleConn                      = 50
+	defaultRetries                          = 3
+	defaultRetryDelay         time.Duration = 400
+	defaultMethod                           = MethodGet
 )
 
 const (

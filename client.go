@@ -4,8 +4,10 @@
 package go_httpclient
 
 import (
+	"golang.org/x/net/publicsuffix"
 	"io"
 	"net/http"
+	"net/http/cookiejar"
 	"time"
 )
 
@@ -16,6 +18,7 @@ type Client struct {
 	path       string
 	method     string
 	header     http.Header
+	cookies    []*http.Cookie
 	queries    map[string]string
 	bodyType   string
 	body       interface{}
@@ -28,24 +31,29 @@ type Client struct {
 	failureV        interface{}
 }
 
-var defaultHttpClient = &http.Client{
-	Transport: &http.Transport{
-		MaxIdleConns:        defaultMaxIdleConn,
-		MaxIdleConnsPerHost: defaultMaxIdleConnPerHost,
-	},
-}
-
 func New() *Client {
 	return &Client{
 		setting: &Settings{
-			Retries:    3,
-			RetryDelay: 400,
+			Retries:    defaultRetries,
+			RetryDelay: defaultRetryDelay,
 		},
-		httpClient:      defaultHttpClient,
-		method:          MethodGet,
+		httpClient:      getDefaultHttpClient(),
+		method:          defaultMethod,
 		header:          make(http.Header),
+		cookies:         make([]*http.Cookie, 0),
 		bodyType:        bodyTypeDefault,
 		responseDecoder: jsonDecoder{},
+	}
+}
+
+func getDefaultHttpClient() *http.Client {
+	cookieJar, _ := cookiejar.New(&cookiejar.Options{PublicSuffixList: publicsuffix.List})
+	return &http.Client{
+		Transport: &http.Transport{
+			MaxIdleConns:        defaultMaxIdleConn,
+			MaxIdleConnsPerHost: defaultMaxIdleConnPerHost,
+		},
+		Jar: cookieJar,
 	}
 }
 
@@ -74,5 +82,12 @@ func (c *Client) SetSuccessV(v interface{}) *Client {
 
 func (c *Client) SetFailureV(v interface{}) *Client {
 	c.failureV = v
+	return c
+}
+
+func (c *Client) SetTransport(transport http.RoundTripper) *Client {
+	if transport != nil {
+		c.httpClient.Transport = transport
+	}
 	return c
 }
