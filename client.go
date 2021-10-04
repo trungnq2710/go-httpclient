@@ -4,10 +4,8 @@
 package go_httpclient
 
 import (
-	"golang.org/x/net/publicsuffix"
 	"io"
 	"net/http"
-	"net/http/cookiejar"
 	"time"
 )
 
@@ -31,29 +29,25 @@ type Client struct {
 	failureV        interface{}
 }
 
+var defaultHttpClient = &http.Client{
+	Transport: &http.Transport{
+		MaxIdleConns:        defaultMaxIdleConn,
+		MaxIdleConnsPerHost: defaultMaxIdleConnPerHost,
+	},
+}
+
 func New() *Client {
 	return &Client{
 		setting: &Settings{
 			Retries:    defaultRetries,
 			RetryDelay: defaultRetryDelay,
 		},
-		httpClient:      getDefaultHttpClient(),
+		httpClient:      defaultHttpClient,
 		method:          defaultMethod,
 		header:          make(http.Header),
 		cookies:         make([]*http.Cookie, 0),
 		bodyType:        bodyTypeDefault,
 		responseDecoder: jsonDecoder{},
-	}
-}
-
-func getDefaultHttpClient() *http.Client {
-	cookieJar, _ := cookiejar.New(&cookiejar.Options{PublicSuffixList: publicsuffix.List})
-	return &http.Client{
-		Transport: &http.Transport{
-			MaxIdleConns:        defaultMaxIdleConn,
-			MaxIdleConnsPerHost: defaultMaxIdleConnPerHost,
-		},
-		Jar: cookieJar,
 	}
 }
 
