@@ -71,14 +71,8 @@ func (c *Client) Do() (resp *http.Response, err error) {
 		return
 	}
 
-	// when err is nil, resp contains a non-nil resp.Body which must be closed
-	defer resp.Body.Close()
-
-	// The default HTTP client's Transport may not
-	// reuse HTTP/1.x "keep-alive" TCP connections if the Body is
-	// not read to completion and closed.
-	// See: https://golang.org/pkg/net/http/#Response
-	defer io.Copy(ioutil.Discard, resp.Body)
+	//defer resp.Body.Close()
+	//defer io.Copy(ioutil.Discard, resp.Body)
 
 	// Don't try to decode on 204s or Content-Length is 0
 	if resp.StatusCode == http.StatusNoContent || resp.ContentLength == 0 {
@@ -90,6 +84,24 @@ func (c *Client) Do() (resp *http.Response, err error) {
 		err = decodeResponse(resp, c.responseDecoder, c.successV, c.failureV)
 	}
 	return resp, err
+}
+
+func (c *Client) Exec() error {
+	resp, err := c.Do()
+	if err != nil {
+		return err
+	}
+
+	// when err is nil, resp contains a non-nil resp.Body which must be closed
+	defer resp.Body.Close()
+
+	// The default HTTP client's Transport may not
+	// reuse HTTP/1.x "keep-alive" TCP connections if the Body is
+	// not read to completion and closed.
+	// See: https://golang.org/pkg/net/http/#Response
+	defer io.Copy(ioutil.Discard, resp.Body)
+
+	return nil
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
