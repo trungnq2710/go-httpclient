@@ -39,7 +39,9 @@ func (c *Client) buildRequest() (err error) {
 	if len(c.queries) > 0 {
 		q := c.req.URL.Query()
 		for k, v := range c.queries {
-			q.Add(k, v)
+			for _, iv := range v {
+				q.Add(k, iv)
+			}
 		}
 		c.req.URL.RawQuery = q.Encode()
 	}

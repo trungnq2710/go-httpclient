@@ -6,6 +6,7 @@ package go_httpclient
 import (
 	"io"
 	"net/http"
+	"net/url"
 	"time"
 )
 
@@ -17,7 +18,7 @@ type Client struct {
 	method     string
 	header     http.Header
 	cookies    []*http.Cookie
-	queries    map[string]string
+	queries    url.Values
 	bodyType   string
 	body       interface{}
 	reqBody    io.Reader
@@ -46,6 +47,7 @@ func New() *Client {
 		method:          defaultMethod,
 		header:          make(http.Header),
 		cookies:         make([]*http.Cookie, 0),
+		queries:         url.Values{},
 		bodyType:        bodyTypeDefault,
 		responseDecoder: jsonDecoder{},
 	}
