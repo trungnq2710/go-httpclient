@@ -1,7 +1,7 @@
 // Created at 1/20/2021
 // Developer: trungnq2710 (trungnq2710@gmail.com)
 
-package go_httpclient
+package httpclient
 
 import "time"
 
@@ -14,9 +14,10 @@ const (
 )
 
 const (
-	contentTypeKey  = "Content-Type"
-	contentTypeJson = "application/json"
-	contentTypeForm = "application/x-www-form-urlencoded"
+	contentTypeKey       = "Content-Type"
+	contentTypeJson      = "application/json"
+	contentTypeForm      = "application/x-www-form-urlencoded"
+	contentTypePlainText = "text/plain; charset=utf-8"
 )
 
 const (

@@ -1,7 +1,7 @@
 // Created at 10/3/2021 8:43 PM
 // Developer: trungnq2710 (trungnq2710@gmail.com)
 
-package go_httpclient
+package httpclient
 
 import (
 	"golang.org/x/net/publicsuffix"

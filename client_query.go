@@ -1,7 +1,7 @@
 // Created at 1/20/2021
 // Developer: trungnq2710 (trungnq2710@gmail.com)
 
-package go_httpclient
+package httpclient
 
 func (c *Client) SetQueryParam(param, value string) *Client {
 	c.queries.Set(param, value)
