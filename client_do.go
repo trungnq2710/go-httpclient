@@ -54,9 +54,14 @@ func (c *Client) buildRequest() (err error) {
 }
 
 func (c *Client) Do() (resp *http.Response, err error) {
+	if c.err != nil {
+		err = c.err
+		return
+	}
+
 	err = c.buildRequest()
 	if err != nil {
-		return nil, err
+		return
 	}
 
 	// retries default value is 0, it will run once.
@@ -78,14 +83,14 @@ func (c *Client) Do() (resp *http.Response, err error) {
 
 	// Don't try to decode on 204s or Content-Length is 0
 	if resp.StatusCode == http.StatusNoContent || resp.ContentLength == 0 {
-		return resp, nil
+		return
 	}
 
 	// Decode from json
 	if c.successV != nil || c.failureV != nil {
 		err = decodeResponse(resp, c.responseDecoder, c.successV, c.failureV)
 	}
-	return resp, err
+	return
 }
 
 func (c *Client) Exec() error {

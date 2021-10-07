@@ -15,7 +15,8 @@ const (
 
 const (
 	contentTypeKey       = "Content-Type"
-	contentTypeJson      = "application/json"
+	contentTypeJSON      = "application/json"
+	contentTypeXML       = "application/xml"
 	contentTypeForm      = "application/x-www-form-urlencoded"
 	contentTypePlainText = "text/plain; charset=utf-8"
 )
@@ -34,6 +35,7 @@ const (
 
 const (
 	bodyTypeDefault = "BODY_TYPE_DEFAULT"
-	bodyTypeJson    = "BODY_TYPE_JSON"
+	bodyTypeJSON    = "BODY_TYPE_JSON"
+	bodyTypeXML     = "BODY_TYPE_XML"
 	bodyTypeForm    = "BODY_TYPE_FORM"
 )

@@ -11,18 +11,25 @@ import (
 	"io/ioutil"
 )
 
-func (c *Client) SetBody(body interface{}) *Client {
+func (c *Client) SetBody(obj interface{}) *Client {
 	c.bodyType = bodyTypeDefault
-	c.body = body
+	c.body = obj
 	return c
 }
 
-func (c *Client) SetJsonBody(body interface{}) *Client {
-	c.SetHeader(contentTypeKey, contentTypeJson)
-	c.bodyType = bodyTypeJson
-	c.body = body
+func (c *Client) SetJsonBody(obj interface{}) *Client {
+	c.SetHeader(contentTypeKey, contentTypeJSON)
+	c.bodyType = bodyTypeJSON
+	c.body = obj
 	return c
 }
+
+//func (c *Client) SetXMLBody(obj interface{}) *Client {
+//	c.SetHeader(contentTypeKey, contentTypeXML)
+//	c.bodyType = bodyTypeXML
+//	c.body = obj
+//	return c
+//}
 
 func (c *Client) SetFormBody(body interface{}) *Client {
 	c.SetHeader(contentTypeKey, contentTypeForm)
@@ -34,7 +41,7 @@ func (c *Client) SetFormBody(body interface{}) *Client {
 func (c *Client) buildBody() (err error) {
 	switch c.bodyType {
 	case bodyTypeDefault:
-	case bodyTypeJson:
+	case bodyTypeJSON:
 		bf := &bytes.Buffer{}
 		err = json.NewEncoder(bf).Encode(c.body)
 		if err != nil {
@@ -42,6 +49,13 @@ func (c *Client) buildBody() (err error) {
 		}
 		c.reqBody = ioutil.NopCloser(bf)
 		return
+	//case bodyTypeXML:
+	//	byts, err := xml.Marshal(c.body)
+	//	if err != nil {
+	//		return errors.Wrap(err, errorXMLConvert.Error())
+	//	}
+	//	c.reqBody = ioutil.NopCloser(bytes.NewReader(byts))
+	//	return
 	case bodyTypeForm:
 		values, err1 := goquery.Values(c.body)
 		if err1 != nil {

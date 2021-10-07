@@ -25,6 +25,8 @@ type Client struct {
 	req        *http.Request
 	resp       *http.Response
 
+	err error
+
 	responseDecoder ResponseDecoder
 	successV        interface{}
 	failureV        interface{}
